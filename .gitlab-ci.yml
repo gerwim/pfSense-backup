@@ -1,0 +1,38 @@
+stages:
+  - develop
+  - release
+
+develop:
+  stage: develop
+  image: docker:latest
+  script:
+    - docker build -f Dockerfile -t $CI_REGISTRY_IMAGE:develop .
+
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:develop
+
+    - echo "---------------------------------------"
+    - echo "Cleanup"
+    - echo "---------------------------------------"
+    - docker rmi $CI_REGISTRY_IMAGE:develop
+  only:
+    - develop
+
+release:
+  stage: release
+  image: docker:latest
+  script:
+    - docker build -f Dockerfile -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG .
+    - docker tag $CI_REGISTRY_IMAGE:$CI_BUILD_TAG $CI_REGISTRY_IMAGE:latest
+
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+    - echo "---------------------------------------"
+    - echo "Cleanup"
+    - echo "---------------------------------------"
+    - docker rmi $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+    - docker rmi $CI_REGISTRY_IMAGE:latest
+  only:
+    - tags
