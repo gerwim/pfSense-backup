@@ -119,7 +119,7 @@ namespace pfSenseBackup.Classes
                 // Create file
                 string fileName = $"pfSenseBackup-{DateTime.Now}.xml";
                 Directory.CreateDirectory("backups"); // create directory if it does not exist
-                using (FileStream fs = File.Create($"backups\\{fileName.ToSafeFileName()}"))
+                using (FileStream fs = File.Create(Path.Combine("backups", fileName.ToSafeFileName())))
                 {
                     Byte[] info = new UTF8Encoding(true).GetBytes(reader.ReadToEnd());
                     // Add some information to the file.
