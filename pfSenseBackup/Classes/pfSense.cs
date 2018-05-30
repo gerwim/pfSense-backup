@@ -88,6 +88,10 @@ namespace pfSenseBackup.Classes
                 html = reader.ReadToEnd();
             }
 
+            // pfSense does not throw a 403 or some sort, so we need to check the contents if it contains username/password invalid string
+            if (html.Contains("Username or Password incorrect"))
+                throw new UsernamePasswordInvalidException("Username or Password incorrect");
+
             ExtractCSRFToken(html);
 
             return true;

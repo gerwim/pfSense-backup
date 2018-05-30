@@ -20,6 +20,10 @@ namespace pfSenseBackup
         {
             PfSense pfSense = new PfSense(url, username, password);
             pfSense.DownloadBackup();
+
+#if DEBUG
+            Console.ReadKey();
+#endif
         }
     }
 }
