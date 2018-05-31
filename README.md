@@ -16,3 +16,25 @@ This will store the backup in `/my/backup/folder`. Just add the command above in
 1) Clone this git repository (and `cd` into it)  
 2) Run `docker build -t pfSenseBackup .`  
 3) Run (basically) the same command as above: `docker run --rm -v /my/backup/folder:/app/backups pfSenseBackup https://192.168.0.1:8443 admin password`
+
+## Automatically backup multiple pfSense machines
+1) Create the backup folders (`mkdir -p /opt/pfSense/backups/pfSense-{master,slave,another}`)  
+2) Create a new script: `vi autoBackup.sh` with the contents below (modify where needed!) 
+```
+#!/bin/bash
+
+BackupTarget() {
+	docker run --rm -v $1:/app/backups reg.gerwim.nl/os/pfsense-backup $2 $3 $4 >> /opt/pfSense/output.log
+}
+
+# Backup master
+BackupTarget "/opt/pfSense/backups/pfSense-master" "https://10.10.10.2:444" "admin" "password"
+
+# Backup slave
+BackupTarget "/opt/pfSense/backups/pfSense-slave" "https://10.10.10.3:444" "admin" "password"
+
+# Backup another pfSense
+BackupTarget "/opt/pfSense/backups/pfSense-another" "https://10.10.10.4:444" "admin" "password"
+```
+
+3) Finally make the script executable `chmod +x autoBackup.sh` and run it: `./autoBackup.sh`. You can run this file by cron to backup your pfSense systems automatically.
