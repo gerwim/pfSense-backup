@@ -1,6 +1,9 @@
 stages:
   - develop
   - release
+  
+services:
+  - docker:dind
 
 develop:
   stage: develop
