@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.0-sdk
+FROM microsoft/dotnet:2.0-sdk as builder
 
 RUN mkdir /app
 WORKDIR /app
@@ -8,4 +8,9 @@ RUN dotnet clean
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-ENTRYPOINT ["dotnet", "out/pfSenseBackup.dll"]
+# Actual deployment image
+FROM microsoft/dotnet:2.0-runtime
+RUN mkdir /app
+WORKDIR /app
+COPY --from=builder /app/out/ /app/
+ENTRYPOINT ["dotnet", "pfSenseBackup.dll"]

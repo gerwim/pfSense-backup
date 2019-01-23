@@ -14,8 +14,8 @@ This will store the backup in `/my/backup/folder`. Just add the command above in
 
 ### Compile it yourself way:
 1) Clone this git repository (and `cd` into it)  
-2) Run `docker build -t pfSenseBackup .`  
-3) Run (basically) the same command as above: `docker run --rm -v /my/backup/folder:/app/backups pfSenseBackup https://192.168.0.1:8443 admin password`
+2) Run `docker build -t pfsense-backup .`  
+3) Run (basically) the same command as above: `docker run --rm -v /my/backup/folder:/app/backups pfsense-backup https://192.168.0.1:8443 admin password`
 
 ## Automatically backup multiple pfSense machines
 1) Create the backup folders (`mkdir -p /opt/pfSense/backups/pfSense-{master,slave,another}`)  
