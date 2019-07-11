@@ -8,7 +8,7 @@ Big note: if you want to support pfSense, you might want to get a [gold subscrip
 
 ## How do I run this?
 ### Easy way:
-`docker run --rm -v /my/backup/folder:/app/backups reg.gerwim.nl/os/pfsense-backup https://192.168.0.1:8443 admin password`  
+`docker run --rm -v /my/backup/folder:/app/backups gerwim/pfsense-backup https://192.168.0.1:8443 admin password`  
   
 This will store the backup in `/my/backup/folder`. Just add the command above in a cronjob, task scheduler or something else to create backups on a recurring base.
 
@@ -24,7 +24,7 @@ This will store the backup in `/my/backup/folder`. Just add the command above in
 #!/bin/bash
 
 BackupTarget() {
-	docker run --rm -v $1:/app/backups reg.gerwim.nl/os/pfsense-backup $2 $3 $4 >> /opt/pfSense/output.log
+	docker run --rm -v $1:/app/backups gerwim/pfsense-backup $2 $3 $4 >> /opt/pfSense/output.log
 }
 
 # Backup master
